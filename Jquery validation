@@ -1,0 +1,38 @@
+// js validation for form
+  $(".site_form form").on("submit", function (event) {
+    event.preventDefault(); // Prevent form submission
+
+    let isValid = true;
+    const fields = [
+      { class: ".wpcf7-text", message: "Name is required." },
+      {
+        class: ".wpcf7-email",
+        pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        message: "Enter a valid email address.",
+      },
+      {
+        class: ".wpcf7-tel",
+        pattern: /^[0-9]{10}$/,
+        message: "Enter a valid 10-digit phone number.",
+      },
+      { class: ".wpcf7-textarea", message: "Message is required." },
+    ];
+    fields.forEach((field) => {
+      const $field = $(field.class);
+      const value = $field.val().trim();
+      const valid = field.pattern ? field.pattern.test(value) : value !== "";
+
+      // Create .invalid-feedback element if it doesn't exist
+      if ($field.next(".invalid-feedback").length === 0) {
+        $field.after('<div class="invalid-feedback"></div>');
+      }
+
+      $field
+        .toggleClass("is-invalid", !valid)
+        .next(".invalid-feedback")
+        .text(valid ? "" : field.message);
+      isValid = isValid && valid;
+    });
+
+    if (isValid) this.submit(); // Submit the form if all fields are valid
+  });
