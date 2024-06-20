@@ -1,0 +1,20 @@
+
+    // Hide the popup when the cross button is clicked
+    $(".cross").click(function(){
+      $(".popup_subscriber").addClass('show');
+    });
+  
+    // Hide the popup when clicking anywhere outside the popup
+    $(document).mouseup(function(e) {
+      var popupWrap = $(".popup_wrap");
+      if (!popupWrap.is(e.target) && popupWrap.has(e.target).length === 0) {
+        $(".popup_subscriber").addClass('show');
+      }
+    });
+  
+    // Hide the popup when pressing the Esc key
+    $(document).keydown(function(e) {
+      if (e.key === "Escape") {
+        $(".popup_subscriber").addClass('show');
+      }
+    });
