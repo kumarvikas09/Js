@@ -3,18 +3,17 @@ $(".sub_btn input").click(function (e) {
     $(".invalid-feedback").remove(); // Remove existing invalid feedback messages
     let form = $(this).closest("form");
     let input_fields = form.find("input, select");
-    // console.log(input_fields.is('input'));
     
     input_fields.each(function () {
         $(this).removeClass("is-invalid");
 
         if ($(this).is("input")) {
-          // For All Inout Fields
-            if ($(this).val() === "") {
+            // For all input fields
+            if ($(this).val() === "" && $(this).attr("type") !== "radio" && $(this).attr("type") !== "checkbox") {
                 $(this).addClass("is-invalid");
                 $(this).parent().append("<div class='invalid-feedback'>This field is required</div>");
             } else if ($(this).attr("type") === "tel") {
-              // For Phone
+                // For phone
                 let phonePattern = /^\d{10}$/;
                 if (!phonePattern.test($(this).val())) {
                     $(this).addClass("is-invalid");
@@ -24,12 +23,23 @@ $(".sub_btn input").click(function (e) {
                 // For email
                 let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailPattern.test($(this).val())) {
-                  $(this).addClass("is-invalid");
-                  $(this).parent().append("<div class='invalid-feedback'>Please enter a valid email address</div>");
+                    $(this).addClass("is-invalid");
+                    $(this).parent().append("<div class='invalid-feedback'>Please enter a valid email address</div>");
                 }
-              }
-            } else if ($(this).is("select")) {
-          // For select
+            } else if ($(this).attr("type") === "radio") {
+                // For radio buttons
+                let radioGroup = form.find(`input[name="${$(this).attr("name")}"]`);
+                if (!radioGroup.is(':checked')) {
+                    radioGroup.closest("div").append("<div class='invalid-feedback'>Please select an option</div>");
+                }
+            } else if ($(this).attr("type") === "checkbox") {
+                // For checkboxes
+                if (!$(this).is(':checked')) {
+                    $(this).closest("div").append("<div class='invalid-feedback'>Please check this box if you want to proceed</div>");
+                }
+            }
+        } else if ($(this).is("select")) {
+            // For select
             if ($(this).val() === "") {
                 $(this).addClass("is-invalid");
                 $(this).parent().append("<div class='invalid-feedback'>Please choose an option</div>");
