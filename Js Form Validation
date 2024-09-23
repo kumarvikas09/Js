@@ -1,0 +1,39 @@
+$(".sub_btn input").click(function (e) {
+    e.preventDefault();
+    $(".invalid-feedback").remove(); // Remove existing invalid feedback messages
+    let form = $(this).closest("form");
+    let input_fields = form.find("input, select");
+    // console.log(input_fields.is('input'));
+    
+    input_fields.each(function () {
+        $(this).removeClass("is-invalid");
+
+        if ($(this).is("input")) {
+          // For All Inout Fields
+            if ($(this).val() === "") {
+                $(this).addClass("is-invalid");
+                $(this).parent().append("<div class='invalid-feedback'>This field is required</div>");
+            } else if ($(this).attr("type") === "tel") {
+              // For Phone
+                let phonePattern = /^\d{10}$/;
+                if (!phonePattern.test($(this).val())) {
+                    $(this).addClass("is-invalid");
+                    $(this).parent().append("<div class='invalid-feedback'>Please enter a valid phone number</div>");
+                }
+            } else if ($(this).attr("type") === "email") {
+                // For email
+                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test($(this).val())) {
+                  $(this).addClass("is-invalid");
+                  $(this).parent().append("<div class='invalid-feedback'>Please enter a valid email address</div>");
+                }
+              }
+            } else if ($(this).is("select")) {
+          // For select
+            if ($(this).val() === "") {
+                $(this).addClass("is-invalid");
+                $(this).parent().append("<div class='invalid-feedback'>Please choose an option</div>");
+            }
+        }
+    });
+});
